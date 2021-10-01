@@ -7,6 +7,7 @@ import { fontFamily, fontSize, gray2 } from './Styles';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react';
 
+// did it wørk?
 function App() {
   return (
     <div
