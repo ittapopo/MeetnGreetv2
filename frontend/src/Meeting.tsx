@@ -3,13 +3,14 @@ import { FC } from 'react';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react';
 import { MeetingData } from './MeetingsData';
-import { gray3 } from './Styles';
+import { gray2, gray3 } from './Styles';
 
 interface Props {
     data: MeetingData;
+    showContent?: boolean;
 }
 
-export const Meeting: FC<Props> = ({ data }) => (
+export const Meeting: FC<Props> = ({ data, showContent = true }) => (
     <div
         css={css`
             padding: 10px 0px;
@@ -21,6 +22,19 @@ export const Meeting: FC<Props> = ({ data }) => (
             `}>
             {data.title}
         </div>
+        {showContent && (
+        <div
+            css={css`
+                padding-bottom: 10px;
+                font-size: 15px;
+                color: ${gray2};
+            `}
+        >
+            {data.content.length > 50
+                ? `${data.content.substring(0, 50)}...`
+                : data.content}
+        </div>
+        )}
         <div
             css={css`
                 font-size: 12px;
@@ -32,4 +46,4 @@ export const Meeting: FC<Props> = ({ data }) => (
                     ${data.created.toLocaleTimeString()}`}
         </div>
     </div>
-)
+);
