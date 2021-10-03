@@ -4,6 +4,7 @@ import { FC } from 'react';
 import { css, jsx } from '@emotion/react';
 import { gray5, accent2 } from './Styles';
 import { MeetingData } from './MeetingsData';
+import { Meeting } from './Meeting';
 
 interface Props {
     data: MeetingData[];
@@ -11,7 +12,7 @@ interface Props {
 
 export const MeetingList: FC<Props> = ({ data }) => (
     <ul
-        css={`
+        css={css`
             list-style: none;
             margin: 10px 0 0 0;
             padding: 0px 20px;
@@ -32,6 +33,7 @@ export const MeetingList: FC<Props> = ({ data }) => (
                 }
             `}
         >
+            <Meeting data={meeting} />
         </li>
         ))}
     </ul>

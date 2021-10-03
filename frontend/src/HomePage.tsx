@@ -2,6 +2,8 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react';
 import { PrimaryButton } from './Styles';
+import { MeetingList } from './MeetingList';
+import { getNewMeetings } from './MeetingsData';
 
 export const HomePage = () => (
     <div
@@ -27,5 +29,6 @@ export const HomePage = () => (
             >Unanswered Meeting</h2>
             <PrimaryButton>Join meeting</PrimaryButton>
         </div>
+        <MeetingList data={getNewMeetings()} />
     </div>
 )
