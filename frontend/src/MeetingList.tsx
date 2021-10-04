@@ -8,9 +8,10 @@ import { Meeting } from './Meeting';
 
 interface Props {
     data: MeetingData[];
+    renderItem?: (item: MeetingData) => JSX.Element;
 }
 
-export const MeetingList: FC<Props> = ({ data }) => (
+export const MeetingList: FC<Props> = ({ data, renderItem }) => (
     <ul
         css={css`
             list-style: none;
@@ -33,7 +34,7 @@ export const MeetingList: FC<Props> = ({ data }) => (
                 }
             `}
         >
-            <Meeting data={meeting} />
+            {renderItem ? renderItem(meeting) : <Meeting data={meeting} />}
         </li>
         ))}
     </ul>
