@@ -3,10 +3,15 @@
 import { jsx, css } from '@emotion/react';
 import { fontFamily, fontSize, gray1, gray2, gray5 } from './Styles';
 
-import React from 'react';
+import { ChangeEvent }from 'react';
 import { UserIcon } from './Icons';
 
-export const Header = () => (
+export const Header = () => {
+  const handleSearchInputChange = (e:
+ChangeEvent<HTMLInputElement>) => {
+      console.log(e.currentTarget.value);
+    };
+return(
     <div
     css={css`
     position: fixed;
@@ -31,7 +36,10 @@ export const Header = () => (
         `}
         >
             M & G</a>
-        <input type="text" placeholder="Search..." 
+        <input 
+          type="text" 
+          placeholder="Search..."
+          onChange={handleSearchInputChange} 
           css={css`
           box-sizing: border-box;
           font-family: ${fontFamily};
@@ -70,3 +78,4 @@ export const Header = () => (
         </a>
     </div>
 );
+};
