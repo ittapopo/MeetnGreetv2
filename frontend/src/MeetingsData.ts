@@ -55,6 +55,12 @@ export interface MeetingData {
     },
   ];
 
-export const getNewMeetings = (): MeetingData[] => {
+export const getNewMeetings = async (): 
+    Promise<MeetingData[]> => {
+      await wait(500);
     return meetings.filter(m => m.guests.length === 0);
 }
+
+const wait = (ms: number ) : Promise<void> => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};

@@ -18,6 +18,6 @@ export const HomePage = () => (
             <PageTitle>Unanswered Meeting</PageTitle>
             <PrimaryButton>Join meeting</PrimaryButton>
         </div>
-        <MeetingList data={getNewMeetings()} />
+        {/* <MeetingList data={getNewMeetings()} />} */}
     </Page>
 );
