@@ -21,6 +21,10 @@ export const HomePage = () => {
         doGetNewMeetings();
     }, []);
 
+const handleCreateMeetingClick = () => {
+    console.log('TODO - move to the CreateMeeting')
+};
+
    return ( 
     <Page>
         <div
@@ -30,7 +34,9 @@ export const HomePage = () => {
                 justify-content: space-between;
             `}>
             <PageTitle>Unanswered Meeting</PageTitle>
-            <PrimaryButton>Join meeting</PrimaryButton>
+            <PrimaryButton onClick={handleCreateMeetingClick}>
+                Create Meeting
+            </PrimaryButton>
         </div>
         {meetingsLoading ? (
             <div
