@@ -22,7 +22,7 @@ export const HomePage = () => {
     }, []);
 
 const handleCreateMeetingClick = () => {
-    console.log('TODO - move to the CreateMeeting')
+    console.log('TODO - move to the CreateMeetingPage')
 };
 
    return ( 

@@ -1,6 +1,6 @@
-import { FC } from 'react';
 /** @jsxRuntime classic */
 /** @jsx jsx */
+import { FC } from 'react';
 import { css, jsx } from '@emotion/react';
 import { gray5, accent2 } from './Styles';
 import { MeetingData } from './MeetingsData';
@@ -11,7 +11,8 @@ interface Props {
     renderItem?: (item: MeetingData) => JSX.Element;
 }
 
-export const MeetingList: FC<Props> = ({ data, renderItem }) => (
+export const MeetingList: FC<Props> = ({ data, renderItem }) => {
+    return (
     <ul
         css={css`
             list-style: none;
@@ -39,3 +40,4 @@ export const MeetingList: FC<Props> = ({ data, renderItem }) => (
         ))}
     </ul>
 );
+};
