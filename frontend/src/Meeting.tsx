@@ -4,6 +4,7 @@ import { FC } from 'react';
 import { css, jsx } from '@emotion/react';
 import { MeetingData } from './MeetingsData';
 import { gray2, gray3 } from './Styles';
+import { Link } from 'react-router-dom';
 
 interface Props {
     data: MeetingData;
@@ -20,7 +21,14 @@ export const Meeting: FC<Props> = ({ data, showContent = true }) => (
                 padding: 10px 0px;
                 font-size: 19px;
             `}>
+                <Link
+                    css={css`
+                        text-decoration: none;
+                        color: ${gray2};
+                    `}
+                    to={`meetings/${data.meetingId}`}>
             {data.title}
+            </Link>
         </div>
         {showContent && (
         <div

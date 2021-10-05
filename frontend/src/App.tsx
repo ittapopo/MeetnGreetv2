@@ -7,6 +7,7 @@ import { AskPage } from './AskPage';
 import { SearchPage } from './SearchPage';
 import { SignInPage } from './SignInPage';
 import { NotFoundPage } from './NotFoundPage';
+import { MeetingPage } from './MeetingPage';
 
 /** @jsxRuntime classic */
 /** @jsx jsx */
@@ -28,6 +29,7 @@ function App() {
       <Route path="/search" component={SearchPage} />
       <Route path="/ask" component={AskPage} />
       <Route path="/signin" component={SignInPage} />
+      <Route path="/meetings/:meetingId" component={MeetingPage} />
       <Route component={NotFoundPage} />
     </Switch>
     </div>

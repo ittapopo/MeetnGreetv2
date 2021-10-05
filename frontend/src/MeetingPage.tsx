@@ -1,5 +1,13 @@
 /** @jsxRuntime classic */
-import React from 'react';
+import React, { FC } from 'react';
 import { Page } from './Page';
+import { RouteComponentProps } from 'react-router-dom';
 
-export const MeetingPage = () => <Page>Meeting Page</Page>;
+interface RouteParams {
+    meetingId: string;
+}
+
+export const MeetingPage: FC<RouteComponentProps<RouteParams>> = 
+({ 
+    match 
+}) => <Page>Meeting Page {match.params.meetingId}</Page>;
