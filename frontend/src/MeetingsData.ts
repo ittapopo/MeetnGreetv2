@@ -64,3 +64,12 @@ export const getNewMeetings = async ():
 const wait = (ms: number ) : Promise<void> => {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
+
+export const getMeeting = async (
+  meetingId: number
+): Promise<MeetingData | null > => {
+  await wait(500);
+  const results
+    = meetings.filter (m => m.meetingId === meetingId);
+  return results.length === 0 ? null : results[0];
+};
