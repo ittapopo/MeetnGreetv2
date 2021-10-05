@@ -4,6 +4,7 @@ import { jsx, css } from '@emotion/react';
 import { fontFamily, fontSize, gray1, gray2, gray5 } from './Styles';
 
 import { ChangeEvent }from 'react';
+import { Link } from 'react-router-dom';
 import { UserIcon } from './Icons';
 
 export const Header = () => {
@@ -27,15 +28,15 @@ return(
     box-shadow: 0 3px 7px 0 rgba(110, 112, 114, 0.21);
   `}
     >
-        <a href="./"
+        <Link to="/"
           css={css`
           font-size: 24px;
           font-weight: bold;
           color: ${gray1};
           text-decoration: none;
-        `}
-        >
-            M & G</a>
+        `}>
+            M & G
+        </Link>
         <input 
           type="text" 
           placeholder="Search..."
@@ -56,7 +57,7 @@ return(
           }
         `}
         />
-        <a href="./signin"
+        <Link to="/signin"
           css={css`
           font-family: ${fontFamily};
           font-size: ${fontSize};
@@ -75,7 +76,7 @@ return(
         >
             <UserIcon />
             <span>Sign In</span>
-        </a>
+        </Link>
     </div>
 );
 };

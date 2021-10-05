@@ -6,9 +6,10 @@ import { MeetingList } from './MeetingList';
 import { getNewMeetings, MeetingData } from './MeetingsData';
 import { Page } from './Page';
 import { PageTitle } from './PageTitle';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, FC } from 'react';
+import { RouteComponentProps } from 'react-router';
 
-export const HomePage = () => {
+export const HomePage:FC<RouteComponentProps> = ({ history }) => {
     const [meetings, setMeetings] = useState<MeetingData[] | null>(null);
     const [meetingsLoading, setMeetingsLoading] = useState(true);
 
@@ -22,7 +23,7 @@ export const HomePage = () => {
     }, []);
 
 const handleCreateMeetingClick = () => {
-    console.log('TODO - move to the CreateMeetingPage')
+    history.push('/ask');
 };
 
    return ( 
