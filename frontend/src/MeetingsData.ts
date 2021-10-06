@@ -73,3 +73,14 @@ export const getMeeting = async (
     = meetings.filter (m => m.meetingId === meetingId);
   return results.length === 0 ? null : results[0];
 };
+
+export const searchMeetings = async (
+  criteria: string,
+): Promise<MeetingData[]> => {
+  await wait(500);
+  return meetings.filter(
+    m =>
+      m.title.toLowerCase().indexOf(criteria.toLowerCase()) >= 0 ||
+      m.content.toLowerCase().indexOf(criteria.toLowerCase()) >= 0,
+  );
+};
