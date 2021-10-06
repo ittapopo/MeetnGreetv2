@@ -6,6 +6,7 @@ import { FC, useState, Fragment, useEffect } from 'react';
 import { Page } from './Page';
 import { RouteComponentProps } from 'react-router-dom';
 import { MeetingData, getMeeting } from './MeetingsData';
+import { AnswerList } from './AnswerList';
 
 interface RouteParams {
     meetingId: string;
@@ -67,6 +68,7 @@ export const MeetingPage: FC<RouteComponentProps<RouteParams>> =
                         ${meeting.created.toLocaleDateString()}
                         ${meeting.created.toLocaleTimeString()}`}
               </div>
+              <AnswerList data={meeting.guests} />
         </Fragment>
     )}
   </div>
