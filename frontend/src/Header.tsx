@@ -3,7 +3,7 @@
 import { jsx, css } from '@emotion/react';
 import { fontFamily, fontSize, gray1, gray2, gray5 } from './Styles';
 
-import { ChangeEvent, FC, useState }from 'react';
+import { ChangeEvent, FC, useState, FormEvent }from 'react';
 import { 
   Link,
   RouteComponentProps,
@@ -23,6 +23,11 @@ export const Header: FC<RouteComponentProps> = ({
   const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
       setSearch(e.currentTarget.value);
     };
+
+  const handleSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    history.push(`/search?criteria=${search}`);
+  };
 
 return(
     <div
@@ -49,7 +54,7 @@ return(
         `}>
             M & G
         </Link>
-        <form>
+        <form onSubmit={handleSearchSubmit}>
         <input 
           type="text" 
           placeholder="Search..."

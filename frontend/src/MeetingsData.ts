@@ -12,7 +12,7 @@ export interface MeetingData {
     guestId: number;
     content: string;
     userName: string;
-    attending: boolean;
+    attending: boolean; /** obsobs */
     created: Date;
   }
 
@@ -83,4 +83,50 @@ export const searchMeetings = async (
       m.title.toLowerCase().indexOf(criteria.toLowerCase()) >= 0 ||
       m.content.toLowerCase().indexOf(criteria.toLowerCase()) >= 0,
   );
+};
+
+export interface PostMeetingData {
+  title: string;
+  content: string;
+  userName: string;
+  created: Date;
+  date: string; /** obsobs */
+}
+
+export const postMeeting = async (
+  meeting: PostMeetingData,
+): Promise<MeetingData | undefined> => {
+  await wait(500);
+  const meetingId =
+    Math.max(...meetings.map(m => m.meetingId)) + 1;
+  const newMeeting: MeetingData = {
+    ...meeting,
+    meetingId,
+    guests: [],
+  };
+  meetings.push(newMeeting);
+  return newMeeting;
+};
+
+export interface PostAnswerData {
+  meetingId: number;
+  content: string;
+  userName: string;
+  created: Date;
+  attending: boolean; /** obsobs */
+}
+
+export const postAnswer = async (
+  answer: PostAnswerData,
+): Promise<GuestData | undefined> => {
+  await wait(500);
+  const meeting = meetings.filter(
+    m => m.meetingId === answer.meetingId,
+  ) [0];
+  const answerInMeeting: GuestData = {
+    guestId: 99,
+    ...answer,
+  };
+  meeting.guests.push(answerInMeeting);
+  return answerInMeeting;
 };
