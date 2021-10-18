@@ -1,6 +1,6 @@
 /** @jsxRuntime classic */
 import React, { lazy, Suspense } from 'react';
-import { Header } from './Header';
+import { HeaderWithRouter as Header } from './Header';
 import { HomePage } from './HomePage';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react';

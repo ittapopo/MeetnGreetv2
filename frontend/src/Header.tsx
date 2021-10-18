@@ -3,15 +3,27 @@
 import { jsx, css } from '@emotion/react';
 import { fontFamily, fontSize, gray1, gray2, gray5 } from './Styles';
 
-import { ChangeEvent }from 'react';
-import { Link } from 'react-router-dom';
+import { ChangeEvent, FC, useState }from 'react';
+import { 
+  Link,
+  RouteComponentProps,
+  withRouter,
+} from 'react-router-dom';
 import { UserIcon } from './Icons';
 
-export const Header = () => {
-  const handleSearchInputChange = (e:
-ChangeEvent<HTMLInputElement>) => {
-      console.log(e.currentTarget.value);
+export const Header: FC<RouteComponentProps> = ({
+  history,
+  location,
+}) => {
+  const searchParams = new URLSearchParams(location.search);
+  const criteria = searchParams.get('criteria') || "";
+
+  const [search, setSearch] = useState(criteria);
+
+  const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+      setSearch(e.currentTarget.value);
     };
+
 return(
     <div
     css={css`
@@ -37,9 +49,11 @@ return(
         `}>
             M & G
         </Link>
+        <form>
         <input 
           type="text" 
           placeholder="Search..."
+          value={search}
           onChange={handleSearchInputChange} 
           css={css`
           box-sizing: border-box;
@@ -57,6 +71,7 @@ return(
           }
         `}
         />
+        </form>
         <Link to="/signin"
           css={css`
           font-family: ${fontFamily};
@@ -80,3 +95,5 @@ return(
     </div>
 );
 };
+
+export const HeaderWithRouter = withRouter(Header);
