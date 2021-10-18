@@ -7,6 +7,8 @@ import { Page } from './Page';
 import { RouteComponentProps } from 'react-router-dom';
 import { MeetingData, getMeeting } from './MeetingsData';
 import { AnswerList } from './AnswerList';
+import { Form } from './Form';
+import { Field } from './Field';
 
 interface RouteParams {
     meetingId: string;
@@ -69,6 +71,15 @@ export const MeetingPage: FC<RouteComponentProps<RouteParams>> =
                         ${meeting.created.toLocaleTimeString()}`}
               </div>
               <AnswerList data={meeting.guests} />
+              <div
+                css={css`
+                  margin-top: 20px;
+                  `}
+                >
+                  <Form submitCaption="Submit Your Answer">
+                    <Field name="content" label="Your Answer" type="TextArea" />
+                  </Form>
+                </div>
         </Fragment>
     )}
   </div>

@@ -75,7 +75,7 @@ export const Field: FC<Props> = ({
               type={type.toLowerCase()} 
               id={name}
               value={
-                  values[name] === undefined ? '' : values.values[name]
+                  values[name] === undefined ? '' : values[name]
               }
               onChange={handleChange}
               css={baseCSS} />
