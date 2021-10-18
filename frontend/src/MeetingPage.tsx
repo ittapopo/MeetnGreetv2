@@ -7,7 +7,7 @@ import { Page } from './Page';
 import { RouteComponentProps } from 'react-router-dom';
 import { MeetingData, getMeeting } from './MeetingsData';
 import { AnswerList } from './AnswerList';
-import { Form } from './Form';
+import { Form, required, minLength } from './Form';
 import { Field } from './Field';
 
 interface RouteParams {
@@ -76,7 +76,15 @@ export const MeetingPage: FC<RouteComponentProps<RouteParams>> =
                   margin-top: 20px;
                   `}
                 >
-                  <Form submitCaption="Submit Your Answer">
+                  <Form 
+                   submitCaption="Submit Your Answer"
+                   validationRules={{
+                     content: [
+                       { validator: required },
+                       { validator: minLength, arg: 50 }
+                     ]
+                   }}
+                  >
                     <Field name="content" label="Your Answer" type="TextArea" />
                   </Form>
                 </div>
