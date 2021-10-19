@@ -3,7 +3,7 @@
 import { css, jsx } from '@emotion/react';
 import { PrimaryButton } from './Styles';
 import { MeetingList } from './MeetingList';
-import { getNewMeetings, MeetingData } from './MeetingsData';
+import { GettingUnansweredMeetings, MeetingData } from './MeetingsData';
 import { Page } from './Page';
 import { PageTitle } from './PageTitle';
 import { useEffect, useState, FC } from 'react';
@@ -14,12 +14,12 @@ export const HomePage:FC<RouteComponentProps> = ({ history }) => {
     const [meetingsLoading, setMeetingsLoading] = useState(true);
 
     useEffect(() => {
-        const doGetNewMeetings = async () => {
-            const newMeetings = await getNewMeetings();
+        const doGetUnansweredMeetings = async () => {
+            const newMeetings = await GettingUnansweredMeetings();
             setMeetings(newMeetings);
             setMeetingsLoading(false);
         };
-        doGetNewMeetings();
+        doGetUnansweredMeetings();
     }, []);
 
 const handleCreateMeetingClick = () => {

@@ -55,7 +55,7 @@ export interface MeetingData {
     },
   ];
 
-export const getNewMeetings = async (): 
+export const GettingUnansweredMeetings = async (): 
     Promise<MeetingData[]> => {
       await wait(500);
     return meetings.filter(m => m.guests.length === 0);
