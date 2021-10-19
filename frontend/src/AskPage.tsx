@@ -1,22 +1,58 @@
 /** @jsxRuntime classic */
-import React from 'react';
+import React, { FC, useEffect } from 'react';
 import { Page } from './Page';
-import { Form, required, minLength, Values } from './Form';
+import { 
+    Form, 
+    required, 
+    minLength, 
+    Values,
+    SubmitResult 
+} from './Form';
 import { Field } from './Field';
-import { postMeeting } from './MeetingsData';
+import { PostMeetingData, MeetingData } from './MeetingsData';
+import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import {
+    postMeetingActionCreator,
+    AppState,
+    clearPostedMeetingActionCreator
+} from './Store';
+import { AnyAction } from 'redux';
 
-export const AskPage = () => {
-    const handleSubmit = async (values: Values) => {
-        const meeting = await postMeeting({
+interface Props {
+    postMeeting: (
+        meeting: PostMeetingData,
+    ) => Promise<void>;
+    postedMeetingResult?: MeetingData;
+    clearPostedMeeting: () => void;
+}
+
+const AskPage: FC<Props> = ({
+    postMeeting,
+    postedMeetingResult,
+    clearPostedMeeting,
+}) => {
+
+    useEffect(() => {
+        return function cleanUp() {
+            clearPostedMeeting();
+        };
+    }, [clearPostedMeeting]);
+
+    const handleSubmit = (values: Values) => {
+        postMeeting({
             title: values.title,
             content: values.content,
             userName: 'Stian',
             created: new Date(),
             date: 'tomorrow', /** obsobs */
         });
-        
-          return { success: meeting ? true : false };
     };
+
+    let submitResult: SubmitResult | undefined;
+    if (postedMeetingResult) {
+        submitResult = { success: postedMeetingResult !== undefined };
+    }
     return (
     <Page title="Create a meeting" >
         <Form 
@@ -32,6 +68,7 @@ export const AskPage = () => {
               ],
           }}
           onSubmit={handleSubmit}
+          submitResult={submitResult}
           failureMessage="There was a problem creating meeting"
           successMessage="Your meeting was successfully submitted"
         >
@@ -42,4 +79,23 @@ export const AskPage = () => {
     );
 };
 
-export default AskPage;
+const mapStateToProps = (store: AppState) => {
+    return {
+        postedMeetingResult: store.meetings.postedResult,
+    };
+};
+const mapDispatchToProps = (
+    dispatch: ThunkDispatch<any, any, AnyAction>,
+) => {
+    return {
+        postMeeting: (meeting: PostMeetingData) =>
+          dispatch(postMeetingActionCreator(meeting)),
+        clearPostedMeeting: () =>
+          dispatch(clearPostedMeetingActionCreator()),
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+) (AskPage);

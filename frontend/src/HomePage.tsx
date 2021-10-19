@@ -3,24 +3,36 @@
 import { css, jsx } from '@emotion/react';
 import { PrimaryButton } from './Styles';
 import { MeetingList } from './MeetingList';
-import { GettingUnansweredMeetings, MeetingData } from './MeetingsData';
+import { MeetingData } from './MeetingsData';
 import { Page } from './Page';
 import { PageTitle } from './PageTitle';
-import { useEffect, useState, FC } from 'react';
+import { useEffect, FC } from 'react';
 import { RouteComponentProps } from 'react-router';
+import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+import {
+    getUnansweredMeetingsActionCreator,
+    AppState
+} from './Store';
 
-export const HomePage:FC<RouteComponentProps> = ({ history }) => {
-    const [meetings, setMeetings] = useState<MeetingData[] | null>(null);
-    const [meetingsLoading, setMeetingsLoading] = useState(true);
+interface Props extends RouteComponentProps {
+    getUnansweredMeetings: () => Promise<void>;
+    meetings: MeetingData[] | null;
+    meetingsLoading: boolean;
+}
 
+const HomePage:FC<Props> = ({ 
+    history,
+    meetings,
+    meetingsLoading,
+    getUnansweredMeetings 
+}) => {
     useEffect(() => {
-        const doGetUnansweredMeetings = async () => {
-            const newMeetings = await GettingUnansweredMeetings();
-            setMeetings(newMeetings);
-            setMeetingsLoading(false);
-        };
-        doGetUnansweredMeetings();
-    }, []);
+        if (meetings === null) {
+            getUnansweredMeetings();
+        }
+    }, [meetings, getUnansweredMeetings]);
 
 const handleCreateMeetingClick = () => {
     history.push('/ask');
@@ -54,3 +66,24 @@ const handleCreateMeetingClick = () => {
     </Page>
   );
 };
+
+const mapStateToProps = (store: AppState) => {
+    return {
+        meetings: store.meetings.unanswered,
+        meetingsLoading: store.meetings.loading
+    };
+};
+
+const mapDispatchToProps = (
+    dispatch: ThunkDispatch<any, any, AnyAction>,
+) => {
+    return {
+        getUnansweredMeetings: () =>
+          dispatch(getUnansweredMeetingsActionCreator()),
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+) (HomePage);

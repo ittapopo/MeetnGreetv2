@@ -1,7 +1,9 @@
 /** @jsxRuntime classic */
 import React, { lazy, Suspense } from 'react';
+import { Provider } from 'react-redux';
+import { configureStore } from './Store';
 import { HeaderWithRouter as Header } from './Header';
-import { HomePage } from './HomePage';
+import HomePage from './HomePage';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react';
 import { fontFamily, fontSize, gray2 } from './Styles';
@@ -12,8 +14,11 @@ import { NotFoundPage } from './NotFoundPage';
 import { MeetingPage } from './MeetingPage';
 const AskPage = lazy(() => import('./AskPage')); 
 
+const store = configureStore();
+
 function App() {
   return (
+   <Provider store={store}>
     <BrowserRouter>
     <div
     css={css`
@@ -46,6 +51,7 @@ function App() {
     </Switch>
     </div>
     </BrowserRouter>
+    </Provider>
   );
 }
 
