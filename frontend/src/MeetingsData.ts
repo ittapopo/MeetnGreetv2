@@ -1,7 +1,7 @@
 export interface MeetingData {
     meetingId: number;
     title: string;
-    date: string;
+
     content: string;
     userName: string;
     created: Date;
@@ -12,15 +12,42 @@ export interface MeetingData {
     guestId: number;
     content: string;
     userName: string;
-    attending: boolean; /** obsobs */
+
     created: Date;
   }
+
+  export interface MeetingDataFromServer {
+    meetingId: number;
+    title: string;
+    content: string;
+    userName: string;
+    created: string;
+    guests: GuestDataFromServer[];
+  }
+
+  export interface GuestDataFromServer {
+    guestId: number;
+    content: string;
+    userName: string;
+    created: string;
+  }
+
+  export const mapMeetingFromServer = (
+    meeting: MeetingDataFromServer,
+  ): MeetingData => ({
+    ...meeting,
+    created: new Date(meeting.created.substr(0, 19)),
+    guests: meeting.guests.map(guest => ({
+      ...guest,
+      created: new Date(guest.created.substr(0, 19)),
+    })),
+  });
 
   const meetings: MeetingData[] = [
     {
       meetingId: 1,
       title: 'Status update meeting',
-      date: 'Today, 14:00',
+
       content:
         'Quick breifing about the latest development',
       userName: 'Joe',
@@ -30,7 +57,7 @@ export interface MeetingData {
           guestId: 1,
           content: 'So excited about this! I will be there!',
           userName: 'Sarah',
-          attending: true,
+
           created: new Date(),
         },
         {
@@ -38,7 +65,7 @@ export interface MeetingData {
           content:
             'I can\'t make it this time. So sorry',
           userName: 'Fred',
-          attending: false,
+
           created: new Date(),
         },
       ],
@@ -46,7 +73,7 @@ export interface MeetingData {
     {
       meetingId: 2,
       title: 'Regarding the community potluck',
-      date: 'TBA',
+
       content:
         'We still need more preperations',
       userName: 'Sue',

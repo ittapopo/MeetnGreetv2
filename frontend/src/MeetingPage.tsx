@@ -5,10 +5,20 @@ import { gray3, gray6 } from './Styles';
 import { FC, useState, Fragment, useEffect } from 'react';
 import { Page } from './Page';
 import { RouteComponentProps } from 'react-router-dom';
-import { MeetingData, getMeeting, postAnswer } from './MeetingsData';
+import { 
+  MeetingData, 
+  getMeeting, 
+  postAnswer,
+  mapMeetingFromServer,
+  MeetingDataFromServer } from './MeetingsData';
 import { AnswerList } from './AnswerList';
 import { Form, required, minLength, Values } from './Form';
 import { Field } from './Field';
+import {
+  HubConnectionBuilder,
+  HubConnectionState,
+  HubConnection,
+} from '@aspnet/signalr';
 
 interface RouteParams {
     meetingId: string;
@@ -21,15 +31,76 @@ export const MeetingPage: FC<RouteComponentProps<RouteParams>> =
     const [meeting, setMeeting]
     = useState<MeetingData | null>(null);
 
+    const setUpSignalRConnection = async (meetingId: number) => {
+      const connection = new HubConnectionBuilder()
+        .withUrl('https://localhost:44357/meetingshub')
+        .withAutomaticReconnect()
+        .build();
+
+      connection.on('Message', (message: string) => {
+        console.log('Message', message);
+      });
+      connection.on('ReceiveMeeting', (meeting: MeetingDataFromServer) => {
+        console.log('ReceiveMeeting', meeting);
+        setMeeting(mapMeetingFromServer(meeting));
+      });
+
+      try {
+        await connection.start();
+      } catch (err) {
+        console.log(err);
+      }
+
+      if (connection.state === HubConnectionState.Connected) {
+        connection
+          .invoke('SubscribeMeeting', meetingId)
+          .catch((err: Error) => {
+            return console.error(err.toString());
+          });
+      }
+      return connection
+    }
+
+    const cleanUpSignalRconnection = async (
+      meetingId: number,
+      connection: HubConnection,
+    ) => {
+      if (connection.state === HubConnectionState.Connected) {
+        try {
+          await connection.invoke('UnsubscribeMeeting', meetingId);
+        } catch (err) {
+          return console.error(toString());
+        }
+        connection.off('Message');
+        connection.off('ReceiveMeeting');
+        connection.stop();
+      } else {
+        connection.off('Message');
+        connection.off('ReceiveMeeting');
+        connection.stop();
+      }
+    };
+
     useEffect(() => {
         const doGetMeeting = async (meetingId: number) => {
           const foundMeeting = await getMeeting(meetingId);
           setMeeting(foundMeeting);
         };
+        let connection: HubConnection;
         if (match.params.meetingId) {
           const meetingId = Number(match.params.meetingId);
           doGetMeeting(meetingId);
+          setUpSignalRConnection(meetingId).then(con => {
+            connection = con;
+          });
         }
+
+        return function cleanUp() {
+          if (match.params.meetingId) {
+            const meetingId = Number(match.params.meetingId);
+            cleanUpSignalRconnection(meetingId, connection);
+          }
+        };
       }, [match.params.meetingId])
 
   const handleSubmit = async (values: Values) => {
