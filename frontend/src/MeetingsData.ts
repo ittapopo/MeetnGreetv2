@@ -1,3 +1,5 @@
+import { http } from './http';
+
 export interface MeetingData {
     meetingId: number;
     title: string;
@@ -84,9 +86,20 @@ export interface MeetingData {
 
 export const GettingUnansweredMeetings = async (): 
     Promise<MeetingData[]> => {
-      await wait(500);
-    return meetings.filter(m => m.guests.length === 0);
-}
+      try {
+        const result = await http<undefined, MeetingDataFromServer[]>({
+          path: '/meetings/unanswered',
+        });
+        if (result.parsedBody) {
+          return result.parsedBody.map(mapMeetingFromServer);
+        } else {
+          return [];
+        }
+      } catch (ex) {
+        console.error(ex);
+        return [];
+      }
+};
 
 const wait = (ms: number ) : Promise<void> => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -95,21 +108,37 @@ const wait = (ms: number ) : Promise<void> => {
 export const getMeeting = async (
   meetingId: number
 ): Promise<MeetingData | null > => {
-  await wait(500);
-  const results
-    = meetings.filter (m => m.meetingId === meetingId);
-  return results.length === 0 ? null : results[0];
+  try {
+    const result = await http<undefined, MeetingDataFromServer>({
+      path: `/meetings/${meetingId}`,
+    });
+    if (result.ok && result.parsedBody) {
+      return mapMeetingFromServer(result.parsedBody);
+    } else {
+      return null;
+    }
+  } catch (ex) {
+    console.error(ex);
+    return null;
+  }
 };
 
 export const searchMeetings = async (
   criteria: string,
 ): Promise<MeetingData[]> => {
-  await wait(500);
-  return meetings.filter(
-    m =>
-      m.title.toLowerCase().indexOf(criteria.toLowerCase()) >= 0 ||
-      m.content.toLowerCase().indexOf(criteria.toLowerCase()) >= 0,
-  );
+  try {
+    const result = await http<undefined, MeetingDataFromServer[]>({
+      path: `/meetings?search=${criteria}`,
+    });
+    if (result.ok && result.parsedBody){
+      return result.parsedBody.map(mapMeetingFromServer);
+    } else {
+      return [];
+    }
+  } catch (ex) {
+    console.error(ex);
+    return [];
+  }
 };
 
 export interface PostMeetingData {
