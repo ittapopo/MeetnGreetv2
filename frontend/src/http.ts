@@ -2,6 +2,9 @@ import { webAPIUrl } from './AppSettings';
 
 export interface HttpRequest<REQB> {
     path: string;
+    method?: string;
+    body?: REQB;
+    accessToken?: string;
 }
 export interface HttpResponse<RESB> extends Response {
     parsedBody?: RESB;

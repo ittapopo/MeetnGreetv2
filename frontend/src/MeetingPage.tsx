@@ -19,6 +19,8 @@ import {
   HubConnectionState,
   HubConnection,
 } from '@aspnet/signalr';
+import { server } from './AppSettings';
+import { useAuth } from './Auth';
 
 interface RouteParams {
     meetingId: string;
@@ -33,7 +35,7 @@ export const MeetingPage: FC<RouteComponentProps<RouteParams>> =
 
     const setUpSignalRConnection = async (meetingId: number) => {
       const connection = new HubConnectionBuilder()
-        .withUrl('https://localhost:44357/meetingshub')
+        .withUrl(`${server}/meetingshub`)
         .withAutomaticReconnect()
         .build();
 
@@ -45,11 +47,14 @@ export const MeetingPage: FC<RouteComponentProps<RouteParams>> =
         setMeeting(mapMeetingFromServer(meeting));
       });
 
+      async function start() {
       try {
         await connection.start();
       } catch (err) {
         console.log(err);
       }
+    }
+    await start();
 
       if (connection.state === HubConnectionState.Connected) {
         connection
@@ -61,19 +66,21 @@ export const MeetingPage: FC<RouteComponentProps<RouteParams>> =
       return connection
     }
 
-    const cleanUpSignalRconnection = async (
+    const cleanUpSignalRconnection = (
       meetingId: number,
       connection: HubConnection,
     ) => {
       if (connection.state === HubConnectionState.Connected) {
-        try {
-          await connection.invoke('UnsubscribeMeeting', meetingId);
-        } catch (err) {
-          return console.error(toString());
-        }
-        connection.off('Message');
-        connection.off('ReceiveMeeting');
-        connection.stop();
+        connection
+          .invoke('UnsubscribeMeeting', meetingId)
+          .then(() => {
+            connection.off('Message');
+            connection.off('ReceiveMeeting');
+            connection.stop();
+          })
+          .catch ((err: Error) => {
+          return console.error(err.toString());
+        });
       } else {
         connection.off('Message');
         connection.off('ReceiveMeeting');
@@ -82,9 +89,12 @@ export const MeetingPage: FC<RouteComponentProps<RouteParams>> =
     };
 
     useEffect(() => {
+      let cancelled = false;
         const doGetMeeting = async (meetingId: number) => {
           const foundMeeting = await getMeeting(meetingId);
-          setMeeting(foundMeeting);
+          if (!cancelled) {
+            setMeeting(foundMeeting);
+          }
         };
         let connection: HubConnection;
         if (match.params.meetingId) {
@@ -96,6 +106,7 @@ export const MeetingPage: FC<RouteComponentProps<RouteParams>> =
         }
 
         return function cleanUp() {
+          cancelled = true;
           if (match.params.meetingId) {
             const meetingId = Number(match.params.meetingId);
             cleanUpSignalRconnection(meetingId, connection);
@@ -108,14 +119,16 @@ export const MeetingPage: FC<RouteComponentProps<RouteParams>> =
       meetingId: meeting!.meetingId,
       content: values.content,
       userName: 'Fred',
-      created: new Date(),
-      attending: true
+      created: new Date()
     });
 
     return { success: result ? true : false };
-  }
+  };
   
-  return <Page>
+const { isAuthenticated } = useAuth();
+
+  return (
+  <Page>
       <div
     css={css`
       background-color: white;
@@ -154,6 +167,7 @@ export const MeetingPage: FC<RouteComponentProps<RouteParams>> =
                         ${meeting.created.toLocaleTimeString()}`}
               </div>
               <AnswerList data={meeting.guests} />
+              {isAuthenticated && (
               <div
                 css={css`
                   margin-top: 20px;
@@ -174,8 +188,10 @@ export const MeetingPage: FC<RouteComponentProps<RouteParams>> =
                     <Field name="content" label="Your Answer" type="TextArea" />
                   </Form>
                 </div>
+                )}
         </Fragment>
     )}
   </div>
-</Page>;
+</Page>
+  );
 };
