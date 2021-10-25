@@ -12,13 +12,13 @@ import { SearchPage } from './SearchPage';
 import { SignInPage } from './SignInPage';
 import { NotFoundPage } from './NotFoundPage';
 import { MeetingPage } from './MeetingPage';
+import { SignOutPage } from './SignOutPage';
+import { AuthProvider } from './Auth';
 const AskPage = lazy(() => import('./AskPage')); 
 
-const store = configureStore();
-
-function App() {
+const App: React.FC = () => {
   return (
-   <Provider store={store}>
+   <AuthProvider>
     <BrowserRouter>
     <div
     css={css`
@@ -45,13 +45,28 @@ function App() {
             <AskPage />
         </Suspense>
       </Route>
-      <Route path="/signin" component={SignInPage} />
+      <Route 
+        path="/signin"
+        render={() => <SignInPage action="signin" />}
+      />
+      <Route
+        path="/signin-callback"
+        render={() => <SignInPage action="signin-callback" />}
+      />
+      <Route
+        path="/signout"
+        render={() => <SignOutPage action="signout" />}
+      />
+      <Route
+        path="/signout-callback"
+        render={() => <SignOutPage action="signout-callback" />}
+      />
       <Route path="/meetings/:meetingId" component={MeetingPage} />
       <Route component={NotFoundPage} />
     </Switch>
     </div>
     </BrowserRouter>
-    </Provider>
+    </AuthProvider>
   );
 }
 
