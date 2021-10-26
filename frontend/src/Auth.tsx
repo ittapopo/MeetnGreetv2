@@ -50,8 +50,10 @@ import React, {
         }
   
         const isAuthenticatedFromHook = await auth0FromHook.isAuthenticated();
+        
         if (isAuthenticatedFromHook) {
-          setUser(await auth0FromHook.getUser()); // lets see
+          const user = await auth0FromHook.getUser();
+          setUser(user as Auth0User); // lets see
         }
         setIsAuthenticated(isAuthenticatedFromHook);
         setLoading(false);

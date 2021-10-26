@@ -8,9 +8,6 @@ import { Page } from './Page';
 import { PageTitle } from './PageTitle';
 import { useEffect, useState, FC } from 'react';
 import { RouteComponentProps } from 'react-router';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
 import { useAuth } from './Auth';
 
 export const HomePage: FC<RouteComponentProps> = ({ history }) => {

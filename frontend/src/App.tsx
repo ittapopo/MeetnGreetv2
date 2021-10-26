@@ -1,6 +1,5 @@
 /** @jsxRuntime classic */
 import React, { lazy, Suspense } from 'react';
-import { Provider } from 'react-redux';
 import { HeaderWithRouter as Header } from './Header';
 import { HomePage } from './HomePage';
 /** @jsx jsx */

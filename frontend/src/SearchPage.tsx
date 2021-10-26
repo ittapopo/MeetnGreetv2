@@ -16,11 +16,17 @@ export const SearchPage: FC<RouteComponentProps> = ({
     const search = searchParams.get('criteria') || '';
 
     useEffect(() => {
+        let cancelled = false;
         const doSearch = async (criteria: string) => {
             const foundResults = await searchMeetings(criteria);
+            if (!cancelled) {
             setMeetings(foundResults);
+            }
         };
         doSearch(search);
+        return () => {
+            cancelled = true;
+        };
     }, [search]);
 
     return (

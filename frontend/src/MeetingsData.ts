@@ -56,8 +56,8 @@ export const GettingUnansweredMeetings = async (): Promise<MeetingData[]> => {
 };
 
 export const getMeeting = async (
-  meetingId: number
-): Promise<MeetingData | null > => {
+  meetingId: number,
+): Promise<MeetingData | null> => {
   try {
     const result = await http<undefined, MeetingDataFromServer>({
       path: `/meetings/${meetingId}`,
@@ -104,7 +104,7 @@ export const postMeeting = async (
   const accessToken = await getAccessToken();
   try {
     const result = await http<PostMeetingData, MeetingDataFromServer>({
-      path: 'meetings',
+      path: '/meetings',
       method: 'post',
       body: meeting,
       accessToken,
@@ -133,7 +133,7 @@ export const postAnswer = async (
   const accessToken = await getAccessToken();
   try {
     const result = await http<PostAnswerData, GuestData>({
-      path: 'meeting/guest',
+      path: '/meetings/answer',
       method: 'post',
       body: answer,
       accessToken
