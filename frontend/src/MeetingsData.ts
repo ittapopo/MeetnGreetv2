@@ -133,7 +133,7 @@ export const postAnswer = async (
   const accessToken = await getAccessToken();
   try {
     const result = await http<PostAnswerData, GuestData>({
-      path: '/meetings/answer',
+      path: '/meetings/guest',
       method: 'post',
       body: answer,
       accessToken

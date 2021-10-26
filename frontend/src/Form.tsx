@@ -28,7 +28,7 @@ interface FormContextProps {
 export const FormContext = createContext<FormContextProps>({
     values: {},
     errors: {},
-    touched: {}
+    touched: {},
 });
 
 type Validator = (value: any, args?: any) => string;
@@ -63,8 +63,7 @@ export interface SubmitResult {
 interface Props {
     submitCaption?: string;
     validationRules?: ValidationProp;
-    onSubmit: (values: Values) => Promise<SubmitResult> | void;
-    submitResult?: SubmitResult;
+    onSubmit: (values: Values) => Promise<SubmitResult>;
     successMessage?: string;
     failureMessage?: string;
 }
@@ -74,9 +73,8 @@ export const Form: FC<Props> = ({
     children,
     validationRules,
     onSubmit,
-    submitResult,
     successMessage = 'Success!',
-    failureMessage = 'Something went wrong'
+    failureMessage = 'Something went wrong',
  }) => {
     const [values, setValues] = useState<Values>({});
     const [errors, setErrors] = useState<Errors>({});
@@ -141,18 +139,6 @@ export const Form: FC<Props> = ({
         return !haveError;
     };
 
-    const disabled = submitResult
-      ? submitResult.success
-      : submitting || (submitted && !submitError);
-
-    const showError = submitResult
-      ? !submitResult.success
-      : submitted && submitError;
-
-    const showSuccess = submitResult
-      ? submitResult.success
-      : submitted && !submitError;
-
     return (
      <FormContext.Provider
         value={{
@@ -165,12 +151,12 @@ export const Form: FC<Props> = ({
             touched,
             setTouched: (fieldName: string) => {
                 setTouched({ ...touched, [fieldName]: true });
-            }
+            },
         }}
         >
       <form noValidate={true} onSubmit={handleSubmit}>
         <fieldset
-          disabled={disabled}
+          disabled={submitting || (submitted && !submitError)}
           css={css`
           margin: 10px auto 0 auto;
           padding: 30px;
@@ -193,12 +179,12 @@ export const Form: FC<Props> = ({
           {submitCaption}
         </PrimaryButton>
       </div>
-      {showError && (
+      {submitted && submitError && (
           <p css={css`color: red;`}>
               {failureMessage}
           </p>
       )}
-      {showSuccess && (
+      {submitted && !submitError &&(
           <p css={css`color: green;`}>
               {successMessage}
           </p>
