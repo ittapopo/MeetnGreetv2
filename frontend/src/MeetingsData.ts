@@ -39,7 +39,24 @@ export interface MeetingData {
     : [],
   });
 
-export const GettingUnansweredMeetings = async (): Promise<MeetingData[]> => {
+/** export const getUnansweredMeetings = async (): Promise<MeetingData[]> => {
+  let unansweredMeetings: MeetingData[] = [];
+
+  await fetch('https://localhost:44357/api/meetings/unanswered')
+  .then(res => res.json())
+  .then(body => {
+    unansweredMeetings = body;
+  })
+  .catch(err => {
+    console.error(err);
+  });
+  return unansweredMeetings.map(meeting => ({
+    ...meeting,
+    created: new Date(meeting.created)
+  }));
+}; */
+
+export const getUnansweredMeetings = async (): Promise<MeetingData[]> => {
       try {
         const result = await http<undefined, MeetingDataFromServer[]>({
           path: '/meetings/unanswered',
@@ -53,7 +70,7 @@ export const GettingUnansweredMeetings = async (): Promise<MeetingData[]> => {
         console.error(ex);
         return [];
       }
-};
+}; 
 
 export const getMeeting = async (
   meetingId: number,

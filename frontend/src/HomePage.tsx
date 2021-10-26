@@ -3,7 +3,7 @@
 import { css, jsx } from '@emotion/react';
 import { PrimaryButton } from './Styles';
 import { MeetingList } from './MeetingList';
-import { GettingUnansweredMeetings, MeetingData } from './MeetingsData';
+import { getUnansweredMeetings, MeetingData } from './MeetingsData';
 import { Page } from './Page';
 import { PageTitle } from './PageTitle';
 import { useEffect, useState, FC } from 'react';
@@ -17,7 +17,7 @@ export const HomePage: FC<RouteComponentProps> = ({ history }) => {
     useEffect(() => {
         let cancelled = false;
         const doGetUnansweredMeetings = async () => {
-            const unansweredMeetings = await GettingUnansweredMeetings();
+            const unansweredMeetings = await getUnansweredMeetings();
             if (!cancelled) {
                 setMeetings(unansweredMeetings);
                 setMeetingsLoading(false);
