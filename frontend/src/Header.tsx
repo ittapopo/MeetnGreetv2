@@ -64,6 +64,7 @@ return(
     box-shadow: 0 3px 7px 0 rgba(110, 112, 114, 0.21);
   `}
     >
+      <div>
         <Link to="/"
           css={css`
           font-size: 24px;
@@ -73,6 +74,16 @@ return(
         `}>
             M & G
         </Link>
+        <span
+          css={css`
+            margin-left: 10px;
+            font-size: 16px;
+            color: ${gray2};
+            `}
+          >
+            {process.env.REACT_APP_ENV || 'development'}
+            </span>
+            </div>
         <form onSubmit={handleSearchSubmit}>
         <input 
           type="text" 

@@ -1,4 +1,9 @@
-export const server = 'https://localhost:44357';
+export const server =
+  process.env.REACT_APP_ENV === 'production'
+    ? 'https://meetngreet-backend.azurewebsites.net'
+    : process.env.REACT_APP_ENV === 'staging'
+    ? 'https://meetngreetstaging.azurewebsites.net'
+    : 'https://localhost:44357';
 
 export const webAPIUrl = `${server}/api`;
 

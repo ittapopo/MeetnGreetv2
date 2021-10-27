@@ -27,6 +27,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:production": "cross-env REACT_APP_ENV=production npm run build",
+    "build:staging": "cross-env REACT_APP_ENV=staging npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -51,6 +53,7 @@
   "devDependencies": {
     "@types/react-redux": "^7.1.19",
     "@types/react-router-dom": "^5.3.0",
+    "cross-env": "^7.0.3",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.4.1"
